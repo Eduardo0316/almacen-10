@@ -1,4 +1,4 @@
-package com.eduardo.almacen.services;
+package com.eduardo.almacen.services.productos;
 
 import java.math.BigDecimal;
 import java.util.List;
