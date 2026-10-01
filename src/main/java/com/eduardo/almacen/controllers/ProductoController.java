@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eduardo.almacen.dto.productos.ProductoRequest;
 import com.eduardo.almacen.dto.productos.ProductoResponse;
-import com.eduardo.almacen.services.ProductoService;
+import com.eduardo.almacen.services.productos.ProductoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
