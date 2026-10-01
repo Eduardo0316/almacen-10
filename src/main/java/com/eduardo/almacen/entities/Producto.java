@@ -52,7 +52,7 @@ public class Producto {
         if(categoria == null)
             throw new DatoInvalidoExeption("La cateogria es necesaria");
 
-        ValoresNumericos.validarBigDecimanPositivo(precio, "El precui es requerido y debe ser positivo");
+        ValoresNumericos.validarBigDecimanPositivo(precio, "El precio es requerido y debe ser positivo");
 
         ValoresNumericos.validarEnteroPositivo(cantidad, "La cantidad es requerida  debe ser positiva");
     }
