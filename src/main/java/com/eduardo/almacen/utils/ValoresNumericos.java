@@ -13,7 +13,7 @@ public class ValoresNumericos {
     public static void validarEnteroPositivo(Integer numero, String mensaje){
         validarNumeroRequerido(numero, mensaje);
 
-        if (numero >= 0)
+        if (numero <= 0)
             throw new DatoInvalidoExeption(mensaje);
     }
 

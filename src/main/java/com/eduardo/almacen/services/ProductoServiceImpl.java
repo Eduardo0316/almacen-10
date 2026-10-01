@@ -50,7 +50,7 @@ public class ProductoServiceImpl implements ProductoService{
         log.info("Eliminando producto con id {}", id);
         
         repository.delete(producto);
-        repository.flush();;
+        repository.flush();
 
         log.info("Producto con id {} eliminado correctamente", id);
     }
@@ -59,9 +59,16 @@ public class ProductoServiceImpl implements ProductoService{
     @Transactional(readOnly = true)
     public List<ProductoResponse> listar(String nombre, String categoria, BigDecimal precioMin, BigDecimal precioMax) {
         log.info("Listando todos los productos");
-        return repository.findAll()
+
+        Categoria categoriaEnum = null;
+        if (categoria != null && !categoria.isBlank()) {
+            categoriaEnum = Categoria.obtenetCategoriaPorDescripcion(categoria);
+        }
+
+        return repository.listarFiltrado(nombre, categoriaEnum, precioMin, precioMax)
             .stream()
-            .map(mapper::entidadAResponse).toList();
+            .map(mapper::entidadAResponse).
+            toList();
     }
 
     @Override
