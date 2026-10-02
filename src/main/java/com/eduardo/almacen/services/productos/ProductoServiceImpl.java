@@ -10,6 +10,7 @@ import com.eduardo.almacen.dto.productos.ProductoRequest;
 import com.eduardo.almacen.dto.productos.ProductoResponse;
 import com.eduardo.almacen.entities.Producto;
 import com.eduardo.almacen.enums.Categoria;
+import com.eduardo.almacen.exceptions.DatoInvalidoExeption;
 import com.eduardo.almacen.mappers.ProductoMapper;
 import com.eduardo.almacen.repositories.ProductoRepository;
 
@@ -59,6 +60,16 @@ public class ProductoServiceImpl implements ProductoService{
     @Transactional(readOnly = true)
     public List<ProductoResponse> listar(String nombre, String categoria, BigDecimal precioMin, BigDecimal precioMax) {
         log.info("Listando todos los productos");
+
+        if (precioMin != null && precioMax != null && precioMin.compareTo(precioMax) > 0) {
+            throw new DatoInvalidoExeption("El precio mínimo (" + precioMin + ") no puede ser mayor que el precio máximo (" + precioMax + ")");
+        }
+
+        // 2. Validar precios negativos
+        if ((precioMin != null && precioMin.compareTo(BigDecimal.ZERO) < 0) || 
+            (precioMax != null && precioMax.compareTo(BigDecimal.ZERO) < 0)) {
+            throw new DatoInvalidoExeption("Los precios de búsqueda no pueden ser negativos");
+        }
 
         Categoria categoriaEnum = null;
         if (categoria != null && !categoria.isBlank()) {

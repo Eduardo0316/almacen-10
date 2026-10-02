@@ -17,10 +17,13 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
         SELECT p FROM Producto p
         WHERE (:nombre IS NULL OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%')))
         AND (:categoria IS NULL OR p.categoria = :categoria)
-        AND (:precioMin IS NULL OR p.precio >= :precioMin)
-        AND (:precioMax IS NULL OR p.precio <= :precioMax)
+        AND (
+            (:precioMin IS NOT NULL AND :precioMax IS NOT NULL AND p.precio BETWEEN :precioMin AND :precioMax)
+            OR (:precioMin IS NOT NULL AND :precioMax IS NULL AND p.precio >= :precioMin)
+            OR (:precioMin IS NULL AND :precioMax IS NOT NULL AND p.precio <= :precioMax)
+            OR (:precioMin IS NULL AND :precioMax IS NULL)
+        )
     """)
-
     List<Producto> listarFiltrado(
         @Param("nombre") String nombre,
         @Param("categoria") Categoria categoria,

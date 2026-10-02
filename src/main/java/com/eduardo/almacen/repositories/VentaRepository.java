@@ -17,4 +17,7 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
 
     @Query("SELECT v FROM Venta v WHERE v.estadoVenta = com.eduardo.almacen.enums.EstadoVenta.REGISTRADA")
     List<Venta> findAllAndActive();
+    
+    @Query("SELECT v FROM Venta v WHERE v.estadoVenta = com.eduardo.almacen.enums.EstadoVenta.CANCELADA")
+    List<Venta> findAllCancelled();
 }

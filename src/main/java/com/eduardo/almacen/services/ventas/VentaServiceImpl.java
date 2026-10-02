@@ -37,11 +37,21 @@ public class VentaServiceImpl implements VentaService{
     private final SucursalRepository sucursalRepository;
 
 
+    @Transactional 
     @Override
     public VentaResponse cancelar(Long id) {
         log.info("Cancelando venta con ID: {}", id);
         Venta venta = obtenerVentaOException(id);
         venta.cancelar();
+        venta.getDetalleVentas().forEach(detalle -> {
+            Producto producto = detalle.getProducto();
+            int cantidadADevolver = detalle.getCantidadProducto();
+            
+            producto.aumentarCantidad(cantidadADevolver);
+            
+            log.info("Restaurando {} unidades al stock del producto ID: {}", 
+                    cantidadADevolver, producto.getId());
+        });
         return ventaMapper.entidadAResponse(venta);
     }
 
@@ -50,6 +60,15 @@ public class VentaServiceImpl implements VentaService{
     public List<VentaResponse> listar() {
         log.info("Obteniento listado de ventas activas");
         return ventaRepository.findAllAndActive().stream()
+            .map(ventaMapper::entidadAResponse)
+            .toList();
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<VentaResponse> listarCanceladas() {
+        log.info("Obteniento listado de ventas canceladas");
+        return ventaRepository.findAllCancelled().stream()
             .map(ventaMapper::entidadAResponse)
             .toList();
     }
@@ -65,6 +84,7 @@ public class VentaServiceImpl implements VentaService{
     }
 
     @Override
+    @Transactional 
     public VentaResponse registrar(VentaRequest request) {
         log.info("Registrando venta para sucursal ID: {}", request.idSucursal());
 
