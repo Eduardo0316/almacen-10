@@ -8,6 +8,8 @@ import com.eduardo.almacen.dto.ventas.VentaResponse;
 public interface VentaService {
     List<VentaResponse> listar();
 
+    List<VentaResponse> listarCanceladas();
+
     VentaResponse obtenerPorIdActiva(Long id);
 
     VentaResponse registrar(VentaRequest request);

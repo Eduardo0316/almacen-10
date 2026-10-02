@@ -82,6 +82,29 @@ public class VentasController {
         return ResponseEntity.ok(ventaService.listar());
     }
     
+    @GetMapping("/canceladas")
+    @Operation(
+        summary = "Listar ventas canceladas",
+        description = "Lista el historico de las ventas canceladas"
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Listado obtenido"
+    )
+    @ApiResponse(
+        responseCode = "409",
+        description = "El estado de venta no es válido",
+        content = @Content(
+                mediaType = "application/problem+json",
+                schema = @Schema(
+                        implementation = ProblemaDoc.class
+                )
+        )
+    )
+    public ResponseEntity<List<VentaResponse>> listarVentasCanceladas() {
+        return ResponseEntity.ok(ventaService.listarCanceladas());
+    }
+    
     @GetMapping("/{id}")
     @Operation(
         summary = "Obtener venta por ID",
